@@ -1,0 +1,11 @@
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/model/User.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/auth/ResourceServerConfig.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/auth/InfoAdicionalToken.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/auth/JwtConfig.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/service/UserService.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/model/Role.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/auth/SpringSecurityConfig.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/auth/AuthorizationServerConfig.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/DemoApplication.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/dao/IUserDao.java
+/home/javier/development/proyect/tqb/src/main/java/com/base/project/service/IUserService.java
