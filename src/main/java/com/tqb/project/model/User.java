@@ -1,4 +1,4 @@
-package com.base.project.model;
+package com.tqb.project.model;
 
 import java.io.Serializable;
 import java.util.List;
@@ -37,7 +37,7 @@ public class User implements Serializable {
 	private String password;
 
 	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-	private List<Role> roles;
+	private List<Role> role;
 
 	private Boolean enabled;
 

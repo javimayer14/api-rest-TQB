@@ -1,4 +1,4 @@
-package com.base.project.service;
+package com.tqb.project.service;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +14,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.base.project.dao.IUserDao;
-import com.base.project.model.User;
+import com.tqb.project.dao.IUserDao;
+import com.tqb.project.model.User;
 
 @Service
 public class UserService implements UserDetailsService, IUserService {
@@ -34,7 +34,7 @@ public class UserService implements UserDetailsService, IUserService {
 			throw new UsernameNotFoundException("Error en el login: no existe el usuario:'" + username + "'");
 		}
 
-		List<GrantedAuthority> authorities = usuario.getRoles().stream()
+		List<GrantedAuthority> authorities = usuario.getRole().stream()
 				.map(role -> new SimpleGrantedAuthority(role.getName()))
 				.peek(authority -> logger.info("Role" + authority.getAuthority())).collect(Collectors.toList());
 

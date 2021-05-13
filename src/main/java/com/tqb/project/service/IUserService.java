@@ -1,4 +1,4 @@
-package com.base.project.service;
+package com.tqb.project.service;
 
 public interface IUserService {
 

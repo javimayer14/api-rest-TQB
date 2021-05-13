@@ -1,9 +1,9 @@
-package com.base.project.dao;
+package com.tqb.project.dao;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import com.base.project.model.User;
+import com.tqb.project.model.User;
 
 public interface IUserDao extends CrudRepository<User, Long> {
 

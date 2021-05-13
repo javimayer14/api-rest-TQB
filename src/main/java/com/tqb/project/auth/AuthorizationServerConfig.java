@@ -1,4 +1,4 @@
-package com.base.project.auth;
+package com.tqb.project.auth;
 
 import java.util.Arrays;
 
