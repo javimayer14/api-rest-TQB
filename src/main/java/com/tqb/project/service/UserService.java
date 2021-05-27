@@ -1,11 +1,19 @@
 package com.tqb.project.service;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import javax.mail.MessagingException;
+import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,6 +31,8 @@ public class UserService implements UserDetailsService, IUserService {
 	private Logger logger = LoggerFactory.getLogger(IUserService.class);
 	@Autowired
 	private IUserDao usuarioDao;
+    @Autowired
+    private JavaMailSender javaMailSender;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -41,5 +51,47 @@ public class UserService implements UserDetailsService, IUserService {
 		return new org.springframework.security.core.userdetails.User(usuario.getUsername(), usuario.getPassword(), usuario.getEnabled(), true, true, true,
 				authorities);
 	}
+
+	@Override
+	public User save(User user) {
+		return usuarioDao.save(user);
+	}
+	
+    public void sendEmail() throws MessagingException, IOException {
+
+        MimeMessage msg = javaMailSender.createMimeMessage();
+
+        // true = multipart message
+        MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+        helper.setTo("javimayer14@gmail.com");
+
+        helper.setSubject("Validacióm de cuenta TQB");
+
+        // default = text/plain
+        //helper.setText("Check attachment for image!");
+
+        // true = text/html
+        helper.setText("<h1> su cuenta esta siendo evaluada </h1>", true);
+
+        //helper.addAttachment("my_photo.png", new ClassPathResource("android.png"));
+
+        javaMailSender.send(msg);
+
+    }
+	
+//    public void sendEmail() {
+//
+//        SimpleMailMessage msg = new SimpleMailMessage();
+//        msg.setTo("javimayer14@gmail.com");
+//
+//        msg.setSubject("Validacióm de cuenta TQB");
+//        msg.setText("Buenas su cuenta esta siendo evaluada \n "
+//        		+ "En breve nos comunicaremos");
+//
+//        javaMailSender.send(msg);
+//
+//    }
+
+
 
 }

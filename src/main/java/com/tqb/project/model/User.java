@@ -31,6 +31,16 @@ public class User implements Serializable {
  
 	@Column(unique = true, length = 20)
 	private String username;
+	
+	@Column(length = 20)
+	private String name;
+	
+	@Column( length = 30)
+	private String lastname;
+	
+	private Boolean validate;
+	
+	private String email;
 
 	@Column(length = 60)
 	@JsonProperty(access = Access.WRITE_ONLY)
@@ -40,6 +50,9 @@ public class User implements Serializable {
 	private List<Role> role;
 
 	private Boolean enabled;
+	
+	@Column(length = 20)
+	private String country;
 
 
 }
