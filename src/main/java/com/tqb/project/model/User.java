@@ -29,7 +29,7 @@ public class User implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
  
-	@Column(unique = true, length = 20)
+	@Column(unique = true, length = 64)
 	private String username;
 	
 	@Column(length = 20)
@@ -46,13 +46,11 @@ public class User implements Serializable {
 	@JsonProperty(access = Access.WRITE_ONLY)
 	private String password;
 
-	@ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	private List<Role> role;
 
 	private Boolean enabled;
-	
-	@Column(length = 20)
-	private String country;
+
 
 
 }

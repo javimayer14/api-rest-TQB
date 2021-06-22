@@ -22,13 +22,13 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
 	
-		http.authorizeRequests().antMatchers(HttpMethod.GET,
-				"/api/delegados",
+		http.authorizeRequests().antMatchers(HttpMethod.POST,
+				"/*",
 				"/api/delegados/page/**",
 				"/api/conflictosLaborales",
 				"/api/variaciones",
 				"/api/usuarios",
-				"/api/cambioCondiciones").permitAll()
+				"/api/user").permitAll()
 //		.antMatchers(HttpMethod.GET, "/api/delegados/{id}").hasAnyRole("USER","ADMIN")
 //		.antMatchers(HttpMethod.POST, "/api/delegados").hasRole("ADMIN")
 //		.antMatchers("api/delegados/**").hasRole("ADMIN")
@@ -37,12 +37,12 @@ public class ResourceServerConfig extends ResourceServerConfigurerAdapter {
 	}
 	
 	@Bean
-public CorsConfigurationSource corsConfigurationSource() {
+	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration conf = new CorsConfiguration();
-		conf.setAllowedOrigins(Arrays.asList("*"));
+		conf.setAllowedOriginPatterns(Arrays.asList("*"));
 		conf.setAllowedMethods(Arrays.asList("GET","POST","PUT","DELETE","OPTIONS"));
 		conf.setAllowCredentials(true);
-		conf.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization"));
+		conf.setAllowedHeaders(Arrays.asList("Content-Type", "Authorization", "x-requested-with"));
 		
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
 		source.registerCorsConfiguration("/**", conf);
