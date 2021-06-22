@@ -1,8 +1,6 @@
 package com.tqb.project.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.mail.MessagingException;
 
@@ -21,24 +19,18 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.tqb.project.model.User;
 import com.tqb.project.model.dto.ChangePasswordDTO;
-import com.tqb.project.model.Role;
-
 import com.tqb.project.service.IUserService;
 
-
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "*")
 @RestController
 @Configuration
 @EnableScheduling
 @RequestMapping("/api")
 public class UserController {
-	
-	public static final String BUSINESS_MAIL ="redestqb@gmail.com";
-	public static final String AFFAIR_CONTACT_MAIL ="Validacióm de cuenta TQB";
-	public static final String AFFAIR_BUSINESS_MAIL ="Nuevo usuario a confirmar";
 
-
-	
+	public static final String BUSINESS_MAIL = "redestqb@gmail.com";
+	public static final String AFFAIR_CONTACT_MAIL = "Validacióm de cuenta TQB";
+	public static final String AFFAIR_BUSINESS_MAIL = "Nuevo usuario a confirmar";
 
 	@Autowired
 	private IUserService userService;
@@ -49,17 +41,16 @@ public class UserController {
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody User user) throws MessagingException, IOException {
-		userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL );
+		userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL);
 		userService.sendEmail(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL);
 		userService.save(user, passwordEncoder);
 	}
-	
+
 	@PostMapping("user/change-password")
 	@ResponseStatus(HttpStatus.CREATED)
-	public void changePassword(@RequestBody ChangePasswordDTO changePasswordForm, Authentication authentication) throws MessagingException, IOException {
+	public void changePassword(@RequestBody ChangePasswordDTO changePasswordForm, Authentication authentication)
+			throws MessagingException, IOException {
 		userService.changePassword(changePasswordForm, passwordEncoder, authentication);
 	}
-
-
 
 }
