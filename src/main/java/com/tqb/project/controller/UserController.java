@@ -23,8 +23,6 @@ import com.tqb.project.service.IUserService;
 
 @CrossOrigin(origins = "*")
 @RestController
-@Configuration
-@EnableScheduling
 @RequestMapping("/api")
 public class UserController {
 
@@ -41,8 +39,8 @@ public class UserController {
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody User user) throws MessagingException, IOException {
-		userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL);
-		userService.sendEmail(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL);
+//		userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL);
+//		userService.sendEmail(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL);
 		userService.save(user, passwordEncoder);
 	}
 
