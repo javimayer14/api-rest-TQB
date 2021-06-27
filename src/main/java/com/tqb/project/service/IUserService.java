@@ -13,7 +13,7 @@ import com.tqb.project.model.dto.ChangePasswordDTO;
 public interface IUserService {
 	
 	public User save (User user, BCryptPasswordEncoder passwordEncoder) throws MessagingException, IOException;
-	public void sendEmail(String email, String asunt) throws MessagingException, IOException;
+	public void sendEmail(String email, String asunt, String name) throws MessagingException, IOException;
 	public void changePassword(ChangePasswordDTO changePasswordForm, BCryptPasswordEncoder passwordEncoder, Authentication authentication);
 
 }
