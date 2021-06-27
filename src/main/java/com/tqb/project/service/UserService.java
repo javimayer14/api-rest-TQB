@@ -1,5 +1,6 @@
 package com.tqb.project.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,6 +11,7 @@ import javax.mail.internet.MimeMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -69,16 +71,33 @@ public class UserService implements UserDetailsService, IUserService {
 
 	}
 
-	public void sendEmail(String email, String asunt) throws MessagingException, IOException {
-
+	public void sendEmail(String email, String asunt, String name) throws MessagingException, IOException {
+		
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(email);
 		helper.setSubject(asunt);
-		helper.setText("<h1> su cuenta esta siendo evaluada </h1>", true);
-		// helper.addAttachment("my_photo.png", new ClassPathResource("android.png"));
+		helper.setText( "<html>"
+	            + "<body>"
+                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
+	             + "<div><h2>Hola "+name+"</h2>"
+	                + "<div>"
+	                + "<h3> Te contamos que tu solicitud para ser miembro de The Quality Bridge está siendo evaluada por nuestro equipo.</h3>"
+	                + "<h3> En caso de aceptarse la solicitud te llegará un correo en las próximas horas con la bienvenida y más información. </h3>"
+	                + "<h3> Para nosotros es muy importante saber que quienes forman parte de TQB sean inversores reales interesados en conectarse para invertir mejor.</h3>"
+	                + "<h3> Desde ya agradecemos tu interés en participar de la comunidad de inversores que te facilita los puentes para expandir tus oportunidades.</h3>"
+	                + "</div>"
+	                + "<div>Saludos,</div>"
+	                + "El equipo de inversores de The Quality Bridge \n"
+	              + "</div></body>"
+	            + "</html>", true);
+	        helper.addInline("rightSideImage",
+	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+
+	 
+		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
 		javaMailSender.send(msg);
 	}
 
