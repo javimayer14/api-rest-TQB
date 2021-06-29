@@ -26,7 +26,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.tqb.project.dao.ITestDao;
 import com.tqb.project.dao.IUserDao;
+import com.tqb.project.model.TestResult;
 import com.tqb.project.model.User;
 import com.tqb.project.model.dto.ChangePasswordDTO;
 
@@ -40,6 +42,8 @@ public class UserService implements UserDetailsService, IUserService {
 	private IUserDao usuarioDao;
 	@Autowired
 	private JavaMailSender javaMailSender;
+	@Autowired
+	private ITestDao testDao;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -100,6 +104,30 @@ public class UserService implements UserDetailsService, IUserService {
 		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
 		javaMailSender.send(msg);
 	}
+	
+	public void sendEmailResultTest(String email, String name) throws MessagingException, IOException {
+		
+		MimeMessage msg = javaMailSender.createMimeMessage();
+
+		// true = multipart message
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		helper.setTo(email);
+		helper.setSubject("Nuevo test finalizado");
+		helper.setText( "<html>"
+	            + "<body>"
+                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
+	                + "<div>"
+	                + "<h3> Un nuevo usuario con email "+ email +" realizó el test </h3>"
+	                + "</div>"
+	                + "</body>"
+	            + "</html>", true);
+	        helper.addInline("rightSideImage",
+	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+
+	 
+		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
+		javaMailSender.send(msg);
+	}
 
 	@Override
 	public void changePassword(ChangePasswordDTO user, BCryptPasswordEncoder passwordEncoder, Authentication authentication) {
@@ -113,6 +141,12 @@ public class UserService implements UserDetailsService, IUserService {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND);
 		}
 
+	}
+
+	@Override
+	public void saveTest(TestResult testResult) {
+		testDao.save(testResult);
+		
 	}
 
 //    public void sendEmail() {

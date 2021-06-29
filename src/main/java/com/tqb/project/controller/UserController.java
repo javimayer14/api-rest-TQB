@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.tqb.project.model.Pdf;
+import com.tqb.project.model.TestResult;
 import com.tqb.project.model.User;
 import com.tqb.project.model.dto.ChangePasswordDTO;
 import com.tqb.project.service.DocStorageService;
@@ -82,6 +83,14 @@ public class UserController {
 		return ResponseEntity.ok().contentType(MediaType.parseMediaType(pdf.getDocType()))
 				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment:filename=\"" + pdf.getDocName() + "\"")
 				.body(new ByteArrayResource(pdf.getData()));
+	}
+	
+	@PostMapping("user/result-test")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void resulTest(@RequestBody TestResult testResult)
+			throws MessagingException, IOException {
+		userService.saveTest(testResult);
+		userService.sendEmailResultTest(testResult.getEmail(), testResult.getName());
 	}
 
 }
