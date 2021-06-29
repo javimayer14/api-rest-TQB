@@ -17,6 +17,6 @@ public interface IUserService {
 	public void sendEmail(String email, String asunt, String name) throws MessagingException, IOException;
 	public void changePassword(ChangePasswordDTO changePasswordForm, BCryptPasswordEncoder passwordEncoder, Authentication authentication);
 	public void saveTest(TestResult testResult);
-	public void sendEmailResultTest(String email, String name) throws MessagingException, IOException;
+	public void sendEmailResultTest(String email, String name, String bussinesMail) throws MessagingException, IOException;
 
 }

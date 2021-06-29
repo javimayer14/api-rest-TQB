@@ -90,7 +90,7 @@ public class UserController {
 	public void resulTest(@RequestBody TestResult testResult)
 			throws MessagingException, IOException {
 		userService.saveTest(testResult);
-		userService.sendEmailResultTest(testResult.getEmail(), testResult.getName());
+		userService.sendEmailResultTest(BUSINESS_MAIL,testResult.getEmail(), testResult.getName());
 	}
 
 }

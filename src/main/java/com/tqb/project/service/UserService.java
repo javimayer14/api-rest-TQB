@@ -105,13 +105,13 @@ public class UserService implements UserDetailsService, IUserService {
 		javaMailSender.send(msg);
 	}
 	
-	public void sendEmailResultTest(String email, String name) throws MessagingException, IOException {
+	public void sendEmailResultTest(String bussinesEmail, String email, String name) throws MessagingException, IOException {
 		
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
-		helper.setTo(email);
+		helper.setTo(bussinesEmail);
 		helper.setSubject("Nuevo test finalizado");
 		helper.setText( "<html>"
 	            + "<body>"
