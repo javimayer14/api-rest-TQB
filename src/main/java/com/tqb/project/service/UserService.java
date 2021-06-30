@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -36,6 +37,8 @@ import com.tqb.project.model.dto.ChangePasswordDTO;
 public class UserService implements UserDetailsService, IUserService {
 	
 	private static final String USER_NOT_FOUND = "No se encuentra el usuario";
+	private static final String DATA_INTEGRITY = "usuario ya creado";
+
 
 	private Logger logger = LoggerFactory.getLogger(IUserService.class);
 	@Autowired
@@ -69,9 +72,14 @@ public class UserService implements UserDetailsService, IUserService {
 		user.setPassword(passwordBcrypt);
 		user.setUsername(user.getEmail());
 		user.setEnabled(true);
-		User lastInsert = usuarioDao.save(user);
-		usuarioDao.saveUserRole(lastInsert.getId(), 1);
-		return lastInsert;
+		try {
+			User lastInsert = usuarioDao.save(user);
+			usuarioDao.saveUserRole(lastInsert.getId(), 1);
+			return lastInsert;
+			
+		}catch(DataIntegrityViolationException ex) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, DATA_INTEGRITY);
+		}
 
 	}
 
