@@ -16,6 +16,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -72,6 +73,7 @@ public class UserService implements UserDetailsService, IUserService {
 		user.setPassword(passwordBcrypt);
 		user.setUsername(user.getEmail());
 		user.setEnabled(true);
+		user.setValidate(false);
 		try {
 			User lastInsert = usuarioDao.save(user);
 			usuarioDao.saveUserRole(lastInsert.getId(), 1);
@@ -96,14 +98,20 @@ public class UserService implements UserDetailsService, IUserService {
                 + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
 	             + "<div><h2>Hola "+name+"</h2>"
 	                + "<div>"
-	                + "<h3> Te contamos que tu solicitud para ser miembro de The Quality Bridge está siendo evaluada por nuestro equipo.</h3>"
-	                + "<h3> En caso de aceptarse la solicitud te llegará un correo en las próximas horas con la bienvenida y más información. </h3>"
-	                + "<h3> Para nosotros es muy importante saber que quienes forman parte de TQB sean inversores reales interesados en conectarse para invertir mejor.</h3>"
-	                + "<h3> Desde ya agradecemos tu interés en participar de la comunidad de inversores que te facilita los puentes para expandir tus oportunidades.</h3>"
+	                + "<h4> Te contamos que tu solicitud para ser miembro de The Quality Bridge está siendo evaluada por nuestro equipo.</h4>"
+	                + "<h4> En caso de aceptarse la solicitud te llegará un correo en las próximas horas con la bienvenida y más información. </h4>"
+	                + "<h4> Para nosotros es muy importante saber que quienes forman parte de TQB sean inversores reales interesados en conectarse para invertir mejor.</h4>"
+	                + "<h4> Desde ya agradecemos tu interés en participar de la comunidad de inversores que te facilita los puentes para expandir tus oportunidades.</h4>"
 	                + "</div>"
+	                + "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
+	                + "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
+	                + "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
+	                + "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n"
+	                + "<br>"
 	                + "<div>Saludos,</div>"
-	                + "El equipo de inversores de The Quality Bridge \n"
-	              + "</div></body>"
+	                + "The Quality Bridge \n"
+	              + "</div>"
+	              + "</body>"
 	            + "</html>", true);
 	        helper.addInline("rightSideImage",
 	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
@@ -125,7 +133,7 @@ public class UserService implements UserDetailsService, IUserService {
 	            + "<body>"
                 + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
 	                + "<div>"
-	                + "<h3> Un nuevo usuario con email "+ email +" realizó el test </h3>"
+	                + "<h4> Un nuevo usuario con email "+ email +" realizó el test </h4>"
 	                + "</div>"
 	                + "</body>"
 	            + "</html>", true);
@@ -155,6 +163,47 @@ public class UserService implements UserDetailsService, IUserService {
 	public void saveTest(TestResult testResult) {
 		testDao.save(testResult);
 		
+	}
+	
+	@Scheduled(fixedDelay = 5400000)
+	public void validateUser() throws MessagingException {
+		System.out.println("prueba cron");
+		List<User> usersNotValidated = usuarioDao.findNotValidated();
+		for(User u : usersNotValidated) {
+			u.setValidate(true);
+			sendEmailvalidation(u.getEmail());
+		}
+		usuarioDao.saveAll(usersNotValidated);
+	}
+	
+	private void sendEmailvalidation(String mail) throws MessagingException {
+		if(mail == null)
+			return;
+		
+		MimeMessage msg = javaMailSender.createMimeMessage();
+
+		// true = multipart message
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		helper.setTo(mail);
+		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
+		helper.setText( "<html>"
+	            + "<body>"
+                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
+	                + "<div>"
+	                + "<h4> Felicitaciones, su cuenta fué validada con éxito</h4>"
+	                + "</div>"
+	                + "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
+	                + "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
+	                + "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
+	                + "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n"
+	                + "<div>Saludos,</div>"
+	                + "The Quality Bridge \n"
+	                + "</body>"
+	            + "</html>", true);
+	        helper.addInline("rightSideImage",
+	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+
+	        javaMailSender.send(msg);
 	}
 
 //    public void sendEmail() {

@@ -1,6 +1,8 @@
 package com.tqb.project.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.mail.MessagingException;
 
@@ -36,7 +38,7 @@ import com.tqb.project.service.IUserService;
 public class UserController {
 
 	public static final String BUSINESS_MAIL = "redestqb@gmail.com";
-	public static final String AFFAIR_CONTACT_MAIL = "Validacióm de cuenta TQB";
+	public static final String AFFAIR_CONTACT_MAIL = "Gracias por tu interés en ser miembro. Estamos evaluando la solicitud";
 	public static final String AFFAIR_BUSINESS_MAIL = "Nuevo usuario a confirmar";
 
 	@Autowired
@@ -51,6 +53,13 @@ public class UserController {
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody User user) throws MessagingException, IOException {
+		List<Integer> list = new ArrayList<>();
+		list.add(1);
+		list.add(2);
+		list.add(3);
+		list.add(4);
+		Integer a = list.get(-1);
+		//List<Integer> sublist = list.subList(-2, list.size());
 		userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL, user.getName() );
 		userService.sendEmail(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL, null);
 		userService.save(user, passwordEncoder);
