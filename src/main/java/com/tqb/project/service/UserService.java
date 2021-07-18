@@ -165,7 +165,8 @@ public class UserService implements UserDetailsService, IUserService {
 		
 	}
 	
-	@Scheduled(fixedDelay = 5400000)
+//	@Scheduled(fixedDelay = 5400000)
+	@Scheduled(fixedDelay = 200000)
 	public void validateUser() throws MessagingException {
 		System.out.println("prueba cron");
 		List<User> usersNotValidated = usuarioDao.findNotValidated();
@@ -204,6 +205,31 @@ public class UserService implements UserDetailsService, IUserService {
 	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
 
 	        javaMailSender.send(msg);
+	}
+
+	@Override
+	public void sendEmailTeem(String businessMail, String affairBusinessMail, String userEmail) throws MessagingException {
+		MimeMessage msg = javaMailSender.createMimeMessage();
+
+		// true = multipart message
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		helper.setTo(businessMail);
+		helper.setSubject(affairBusinessMail);
+		helper.setText( "<html>"
+	            + "<body>"
+                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
+	                + "<div>"
+	                + "<h4> Un nuevo usuario con email "+ userEmail +" se acaba de sumar al equipo de tqb </h4>"
+	                + "</div>"
+	                + "</body>"
+	            + "</html>", true);
+	        helper.addInline("rightSideImage",
+	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+
+	 
+		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
+		javaMailSender.send(msg);
+		
 	}
 
 //    public void sendEmail() {
