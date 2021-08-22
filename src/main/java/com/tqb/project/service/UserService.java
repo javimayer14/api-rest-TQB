@@ -36,10 +36,9 @@ import com.tqb.project.model.dto.ChangePasswordDTO;
 
 @Service
 public class UserService implements UserDetailsService, IUserService {
-	
+
 	private static final String USER_NOT_FOUND = "No se encuentra el usuario";
 	private static final String DATA_INTEGRITY = "usuario ya creado";
-
 
 	private Logger logger = LoggerFactory.getLogger(IUserService.class);
 	@Autowired
@@ -48,6 +47,7 @@ public class UserService implements UserDetailsService, IUserService {
 	private JavaMailSender javaMailSender;
 	@Autowired
 	private ITestDao testDao;
+
 
 	@Override
 	@Transactional(readOnly = true)
@@ -78,82 +78,70 @@ public class UserService implements UserDetailsService, IUserService {
 			User lastInsert = usuarioDao.save(user);
 			usuarioDao.saveUserRole(lastInsert.getId(), 1);
 			return lastInsert;
-			
-		}catch(DataIntegrityViolationException ex) {
+
+		} catch (DataIntegrityViolationException ex) {
 			throw new ResponseStatusException(HttpStatus.CONFLICT, DATA_INTEGRITY);
 		}
 
 	}
 
 	public void sendEmail(String email, String asunt, String name) throws MessagingException, IOException {
-		
+
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(email);
 		helper.setSubject(asunt);
-		helper.setText( "<html>"
-	            + "<body>"
-                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
-	             + "<div><h2>Hola "+name+"</h2>"
-	                + "<div>"
-	                + "<h4> Te contamos que tu solicitud para ser miembro de The Quality Bridge está siendo evaluada por nuestro equipo.</h4>"
-	                + "<h4> En caso de aceptarse la solicitud te llegará un correo en las próximas horas con la bienvenida y más información. </h4>"
-	                + "<h4> Para nosotros es muy importante saber que quienes forman parte de TQB sean inversores reales interesados en conectarse para invertir mejor.</h4>"
-	                + "<h4> Desde ya agradecemos tu interés en participar de la comunidad de inversores que te facilita los puentes para expandir tus oportunidades.</h4>"
-	                + "</div>"
-	                + "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
-	                + "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
-	                + "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
-	                + "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n"
-	                + "<br>"
-	                + "<div>Saludos,</div>"
-	                + "The Quality Bridge \n"
-	              + "</div>"
-	              + "</body>"
-	            + "</html>", true);
-	        helper.addInline("rightSideImage",
-	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+		helper.setText("<html>" + "<body>"
+				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
+				+ "<div><h2>Hola " + name + "</h2>" + "<div>"
+				+ "<h4> Te contamos que tu solicitud para ser miembro de The Quality Bridge está siendo evaluada por nuestro equipo.</h4>"
+				+ "<h4> En caso de aceptarse la solicitud te llegará un correo en las próximas horas con la bienvenida y más información. </h4>"
+				+ "<h4> Para nosotros es muy importante saber que quienes forman parte de TQB sean inversores reales interesados en conectarse para invertir mejor.</h4>"
+				+ "<h4> Desde ya agradecemos tu interés en participar de la comunidad de inversores que te facilita los puentes para expandir tus oportunidades.</h4>"
+				+ "</div>" + "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
+				+ "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
+				+ "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
+				+ "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n" + "<br>"
+				+ "<div>Saludos,</div>" + "The Quality Bridge \n" + "</div>" + "</body>" + "</html>", true);
+		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
 
-	 
-		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
+		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new
+		// ClassPathResource("android.png"));
 		javaMailSender.send(msg);
 	}
-	
-	public void sendEmailResultTest(String bussinesEmail, String email, String name) throws MessagingException, IOException {
-		
+
+	public void sendEmailResultTest(String bussinesEmail, String email, String name)
+			throws MessagingException, IOException {
+
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(bussinesEmail);
 		helper.setSubject("Nuevo test finalizado");
-		helper.setText( "<html>"
-	            + "<body>"
-                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
-	                + "<div>"
-	                + "<h4> Un nuevo usuario con email "+ email +" realizó el test </h4>"
-	                + "</div>"
-	                + "</body>"
-	            + "</html>", true);
-	        helper.addInline("rightSideImage",
-	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+		helper.setText("<html>" + "<body>"
+				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
+				+ "<h4> Un nuevo usuario con email " + email + " realizó el test </h4>" + "</div>" + "</body>"
+				+ "</html>", true);
+		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
 
-	 
-		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
+		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new
+		// ClassPathResource("android.png"));
 		javaMailSender.send(msg);
 	}
 
 	@Override
-	public void changePassword(ChangePasswordDTO user, BCryptPasswordEncoder passwordEncoder, Authentication authentication) {
+	public void changePassword(ChangePasswordDTO user, BCryptPasswordEncoder passwordEncoder,
+			Authentication authentication) {
 		try {
-			String username  = authentication.getName();
+			String username = authentication.getName();
 			User currentUser = usuarioDao.findByUsername(username);
 			String passwordBcrypt = passwordEncoder.encode(user.getNewPassword());
 			currentUser.setPassword(passwordBcrypt);
 			usuarioDao.save(currentUser);
-		}catch(NullPointerException e) {
+		} catch (NullPointerException e) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, USER_NOT_FOUND);
 		}
 
@@ -162,74 +150,74 @@ public class UserService implements UserDetailsService, IUserService {
 	@Override
 	public void saveTest(TestResult testResult) {
 		testDao.save(testResult);
-		
+
 	}
-	
+
 //	@Scheduled(fixedDelay = 5400000)
 	@Scheduled(fixedDelay = 200000)
 	public void validateUser() throws MessagingException {
 		System.out.println("prueba cron");
 		List<User> usersNotValidated = usuarioDao.findNotValidated();
-		for(User u : usersNotValidated) {
+		BCryptPasswordEncoder passwordEncode = new BCryptPasswordEncoder();
+		for (User u : usersNotValidated) {
+			Integer randomInt = getRandomNumber(10000, 99999);
+			String randomStringNumber = randomInt.toString();
+			u.setPassword(passwordEncode.encode(randomStringNumber));
 			u.setValidate(true);
-			sendEmailvalidation(u.getEmail());
+			sendEmailvalidation(u.getEmail(), randomStringNumber);
+			System.out.println("La contra generada es: " + randomStringNumber);
 		}
 		usuarioDao.saveAll(usersNotValidated);
 	}
-	
-	private void sendEmailvalidation(String mail) throws MessagingException {
-		if(mail == null)
+
+	private void sendEmailvalidation(String mail, String randomStringNumber) throws MessagingException {
+		if (mail == null)
 			return;
-		
+
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(mail);
 		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
-		helper.setText( "<html>"
-	            + "<body>"
-                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
-	                + "<div>"
-	                + "<h4> Felicitaciones, su cuenta fué validada con éxito</h4>"
-	                + "</div>"
-	                + "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
-	                + "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
-	                + "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
-	                + "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n"
-	                + "<div>Saludos,</div>"
-	                + "The Quality Bridge \n"
-	                + "</body>"
-	            + "</html>", true);
-	        helper.addInline("rightSideImage",
-	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+		helper.setText("<html>" + "<body>"
+				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
+				+ "<h4> Felicitaciones, su cuenta fué validada con éxito</h4>" + "</div>"
+				+ "<h4> Su contraseña generada es: "+ randomStringNumber +"</h4>" + "</div>"
+				+ "<h4> recuerde modificarla para mayor seguridad</h4>" + "</div>"
+				+ "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
+				+ "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
+				+ "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
+				+ "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n" + "<div>Saludos,</div>"
+				+ "The Quality Bridge \n" + "</body>" + "</html>", true);
+		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
 
-	        javaMailSender.send(msg);
+		javaMailSender.send(msg);
 	}
 
 	@Override
-	public void sendEmailTeem(String businessMail, String affairBusinessMail, String userEmail) throws MessagingException {
+	public void sendEmailTeem(String businessMail, String affairBusinessMail, String userEmail)
+			throws MessagingException {
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(businessMail);
 		helper.setSubject(affairBusinessMail);
-		helper.setText( "<html>"
-	            + "<body>"
-                + "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
-	                + "<div>"
-	                + "<h4> Un nuevo usuario con email "+ userEmail +" se acaba de sumar al equipo de tqb </h4>"
-	                + "</div>"
-	                + "</body>"
-	            + "</html>", true);
-	        helper.addInline("rightSideImage",
-	                new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+		helper.setText("<html>" + "<body>"
+				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
+				+ "<h4> Un nuevo usuario con email " + userEmail + " se acaba de sumar al equipo de tqb </h4>"
+				+ "</div>" + "</body>" + "</html>", true);
+		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
 
-	 
-		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new ClassPathResource("android.png"));
+		// helper.addAttachment("ENCABEZADO_TQB_GENERAL.jpg", new
+		// ClassPathResource("android.png"));
 		javaMailSender.send(msg);
-		
+
+	}
+
+	public int getRandomNumber(int min, int max) {
+		return (int) ((Math.random() * (max - min)) + min);
 	}
 
 //    public void sendEmail() {
