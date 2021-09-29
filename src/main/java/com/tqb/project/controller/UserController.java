@@ -37,7 +37,7 @@ import com.tqb.project.service.IUserService;
 @RequestMapping("/api")
 public class UserController {
 
-	public static final String BUSINESS_MAIL = "redestqb@gmail.com";
+	public static final String BUSINESS_MAIL = "equipo@thequalitybridge.com";
 	public static final String AFFAIR_CONTACT_MAIL = "Gracias por tu interés en ser miembro. Estamos evaluando la solicitud";
 	public static final String AFFAIR_BUSINESS_MAIL = "Nuevo usuario a confirmar";
 
@@ -53,9 +53,14 @@ public class UserController {
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody User user) throws MessagingException, IOException {
-		userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL, user.getName() );
-		userService.sendEmailTeem(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL, user.getEmail());
-		userService.save(user, passwordEncoder);
+		try {
+			userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL, user.getName() );
+			userService.sendEmailTeem(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL, user.getEmail());
+			userService.save(user, passwordEncoder);
+		}catch(Exception e) {
+			System.out.println("algo salio mal "+ e);
+		}
+
 	}
 
 	@PostMapping("user/change-password")

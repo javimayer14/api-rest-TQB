@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.slf4j.Logger;
@@ -92,6 +93,7 @@ public class UserService implements UserDetailsService, IUserService {
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(email);
+		helper.setFrom(new InternetAddress("gerencia@thequalitybridgeblog.com"));
 		helper.setSubject(asunt);
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
@@ -201,8 +203,9 @@ public class UserService implements UserDetailsService, IUserService {
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
-		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true); 
 		helper.setTo(businessMail);
+		helper.setFrom(new InternetAddress(businessMail));
 		helper.setSubject(affairBusinessMail);
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
