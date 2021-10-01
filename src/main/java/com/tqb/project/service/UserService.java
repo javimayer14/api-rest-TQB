@@ -93,7 +93,7 @@ public class UserService implements UserDetailsService, IUserService {
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(email);
-		helper.setFrom(new InternetAddress("gerencia@thequalitybridgeblog.com"));
+		helper.setFrom(new InternetAddress("equipo@thequalitybridge.com"));
 		helper.setSubject(asunt);
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
@@ -122,7 +122,7 @@ public class UserService implements UserDetailsService, IUserService {
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(bussinesEmail);
-		helper.setFrom(new InternetAddress("gerencia@thequalitybridgeblog.com"));
+		helper.setFrom(new InternetAddress("equipo@thequalitybridge.com"));
 		helper.setSubject("Nuevo test finalizado");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
@@ -157,7 +157,7 @@ public class UserService implements UserDetailsService, IUserService {
 	}
 
 //	@Scheduled(fixedDelay = 5400000)
-	@Scheduled(fixedDelay = 200000)
+	@Scheduled(fixedDelay = 50000)
 	public void validateUser() throws MessagingException {
 		System.out.println("prueba cron");
 		List<User> usersNotValidated = usuarioDao.findNotValidated();
@@ -182,7 +182,7 @@ public class UserService implements UserDetailsService, IUserService {
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(mail);
-		helper.setFrom(new InternetAddress("gerencia@thequalitybridgeblog.com"));
+		helper.setFrom(new InternetAddress("equipo@thequalitybridge.com"));
 		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
