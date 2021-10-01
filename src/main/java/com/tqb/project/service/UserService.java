@@ -122,6 +122,7 @@ public class UserService implements UserDetailsService, IUserService {
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(bussinesEmail);
+		helper.setFrom(new InternetAddress("gerencia@thequalitybridgeblog.com"));
 		helper.setSubject("Nuevo test finalizado");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
@@ -181,6 +182,7 @@ public class UserService implements UserDetailsService, IUserService {
 		// true = multipart message
 		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(mail);
+		helper.setFrom(new InternetAddress("gerencia@thequalitybridgeblog.com"));
 		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
