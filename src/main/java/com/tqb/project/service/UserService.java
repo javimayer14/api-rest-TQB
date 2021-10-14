@@ -194,7 +194,7 @@ public class UserService implements UserDetailsService, IUserService {
 				+ "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
 				+ "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n" + "<div>Saludos,</div>"
 				+ "The Quality Bridge \n" + "</body>" + "</html>", true);
-		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_GENERAL.jpg"));
+		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_WELCOME.jpg"));
 
 		javaMailSender.send(msg);
 	}
