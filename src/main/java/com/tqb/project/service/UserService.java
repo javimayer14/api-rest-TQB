@@ -99,7 +99,7 @@ public class UserService implements UserDetailsService, IUserService {
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>"
 				+ "<div><h2>Hola " + name + "</h2>" + "<div>"
 				+ "<h4> Te contamos que tu solicitud para ser miembro de The Quality Bridge está siendo evaluada por nuestro equipo.</h4>"
-				+ "<h4> En caso de aceptarse la solicitud te llegará un correo en las próximas horas con la bienvenida y más información. </h4>"
+				+ "<h4> En caso de aceptarse, te llegará un correo en las próximas horas con la bienvenida y más información. </h4>"
 				+ "<h4> Para nosotros es muy importante saber que quienes forman parte de TQB sean inversores reales interesados en conectarse para invertir mejor.</h4>"
 				+ "<h4> Desde ya agradecemos tu interés en participar de la comunidad de inversores que te facilita los puentes para expandir tus oportunidades.</h4>"
 				+ "</div>" + "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
@@ -167,13 +167,13 @@ public class UserService implements UserDetailsService, IUserService {
 			String randomStringNumber = randomInt.toString();
 			u.setPassword(passwordEncode.encode(randomStringNumber));
 			u.setValidate(true);
-			sendEmailvalidation(u.getEmail(), randomStringNumber);
+			sendEmailvalidation(u.getEmail(),u.getName(), randomStringNumber);
 			System.out.println("La contra generada es: " + randomStringNumber);
 		}
 		usuarioDao.saveAll(usersNotValidated);
 	}
 
-	private void sendEmailvalidation(String mail, String randomStringNumber) throws MessagingException {
+	private void sendEmailvalidation(String mail,String name, String randomStringNumber) throws MessagingException {
 		if (mail == null)
 			return;
 
@@ -186,15 +186,50 @@ public class UserService implements UserDetailsService, IUserService {
 		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
-				+ "<h4> Felicitaciones, su cuenta fué validada con éxito</h4>" + "</div>"
-				+ "<h4> Su contraseña generada es: "+ randomStringNumber +"</h4>" + "</div>"
-				+ "<h4> recuerde modificarla para mayor seguridad</h4>" + "</div>"
+				+ "<h4> Hola "+name+", \n"
+				+ "\n"
+				+ "Es un gusto darte la bienvenida a la comunidad de inversores que te facilita los puentes para expandir tus oportunidades. \n"
+				+ "\n"
+				+ "Antes de contarte más, por estar dentro de los 1000 primeros miembros de la comunidad, te invitamos a descargarte el material exclusivo que te prometimos: Como pasar de ahorrista a inversor: Guiá práctica de pasos claves. Haz click aquí para descargarlo. \n"
+				+ "\n"
+				+ "The Quality Bridge está conformada por inversores de habla hispana de todo el mundo que tienen el mismo objetivo: Realizar inversiones exitosas. \n"
+				+ "\n"
+				+ "¿Cómo lo logramos? Conectados y en movimiento. \n"
+				+ "\n"
+				+ "Ser miembro te va a permitir: \n"
+				+ "\n"
+				+ "Acceder a la información completa para invertir en los proyectos.\n"
+				+ "Recibir contenido exclusivo para mejorar tus habilidades como inversor \n"
+				+ "Asegurar tu lugar en seminarios y workshops con referentes del mercado. \n"
+				+ "Prioridad para obtener informes y análisis de mercado para tomar mejores decisiones\n"
+				+ "Tener la posibilidad de compartir proyectos a todos los miembros \n"
+				+ "\n"
+				+ "\n"
+				+ "Como miembro registrado ahora podrás consultar y solicitar la información completa de los proyectos de inversión. Haz click aquí y contáctanos.   \n"
+				+ "\n"
+				+ "The Quality Blog: Con frecuencia semanal podrás ver notas, recomendaciones, consejos y análisis, escritos por nuestro equipo de profesionales y reconocidos periodistas de los medios más importantes. Sobre distintos temas: Economía, Mercado, Real Estate, Finanzas y mucho más. Haz click aquí para ingresar. \n"
+				+ "\n"
+				+ "PRÓXIMAMENTE \n"
+				+ "\n"
+				+ "Ciclo de Webinars: Próximamente presentaremos ciclos de webinars para ampliar tu visión como inversor. ¡Estate atento! \n"
+				+ "\n"
+				+ "TQB Flash Report: Estamos preparando algo que te va acompañar todas las semanas y que tendrá impacto en tus evaluaciones de mercado y al momento de decidir en qué invertir. \n"
+				+ "\n"
+				+ "\n"
+				+ "Si deseas saber más o tienes alguna duda sobre la comunidad de inversores, puedes contactarte con nosotros respondiendo este correo. \n"
+				+ "\n"
+				+ "Es un honor contar contigo en TQB. \n"
+				+ "\n"
+				+ "Saludos! \n"
+				+ "\n"
+				+ "El equipo de inversores de The Quality Bridge \n"
+				+ "</h4>" + "</div>"
 				+ "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
 				+ "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
 				+ "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
 				+ "<a href=\"https://www.linkedin.com/company/thequalitybridge\">Linkedin</a>\n" + "<div>Saludos,</div>"
 				+ "The Quality Bridge \n" + "</body>" + "</html>", true);
-		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_WELCOME.jpg"));
+		helper.addInline("rightSideImage", new File("src/main/resources/img/ENCABEZADO_TQB_WELCOME.jpg	"));
 
 		javaMailSender.send(msg);
 	}

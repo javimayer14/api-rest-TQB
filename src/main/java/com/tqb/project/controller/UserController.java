@@ -38,7 +38,7 @@ import com.tqb.project.service.IUserService;
 public class UserController {
 
 	public static final String BUSINESS_MAIL = "equipo@thequalitybridge.com";
-	public static final String AFFAIR_CONTACT_MAIL = "Gracias por tu interés en ser miembro. Estamos evaluando la solicitud";
+	public static final String AFFAIR_CONTACT_MAIL = "Equipo TQB";
 	public static final String AFFAIR_BUSINESS_MAIL = "Nuevo usuario a confirmar";
 
 	@Autowired
