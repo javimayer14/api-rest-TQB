@@ -186,7 +186,7 @@ public class UserService implements UserDetailsService, IUserService {
 		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
-				+ "<h2> Hola "+name+"</h2>, <br>"
+				+ "<h2> Hola "+name+"</h2><br>"
 				+ "<br>"
 				+ "Es un gusto darte la bienvenida a la comunidad de inversores que te facilita los puentes para expandir tus oportunidades. <br>"
 				+ "<br>"
