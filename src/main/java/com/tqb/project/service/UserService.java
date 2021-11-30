@@ -290,6 +290,16 @@ public class UserService implements UserDetailsService, IUserService {
 		javaMailSender.send(msg);
 	}
 
+	@Override
+	public void saveUserProyectContact(ContactProyectDTO contactProyectDTO) {
+		User user = new User();
+		user.setEmail(contactProyectDTO.getMail());
+		user.setName(contactProyectDTO.getName());
+		user.setLastname(contactProyectDTO.getLastName());
+		user.setPhone(contactProyectDTO.getTelefono());
+		usuarioDao.save(user);
+	}
+
 //    public void sendEmail() {
 //
 //        SimpleMailMessage msg = new SimpleMailMessage();

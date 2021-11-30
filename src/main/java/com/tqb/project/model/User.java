@@ -51,6 +51,9 @@ public class User implements Serializable {
 
 	private Boolean enabled;
 
+	private String phone;
+
+
 
 
 }

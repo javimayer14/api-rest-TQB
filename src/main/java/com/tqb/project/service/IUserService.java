@@ -21,5 +21,6 @@ public interface IUserService {
 	public void sendEmailResultTest(String email, String name, String bussinesMail) throws MessagingException, IOException;
 	public void sendEmailTeem(String businessMail, String affairBusinessMail, String userEmail) throws MessagingException ;
 	public void sendEmailContactProyect(String businessMail, ContactProyectDTO contactProyectDTO) throws MessagingException;
+	public void saveUserProyectContact(ContactProyectDTO contactProyectDTO);
 
 }

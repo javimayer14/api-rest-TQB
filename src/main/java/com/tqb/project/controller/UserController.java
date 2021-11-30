@@ -106,6 +106,8 @@ public class UserController {
 	public void contactProyect(@RequestBody ContactProyectDTO contactProyectDTO)
 			throws MessagingException, IOException {
 		userService.sendEmailContactProyect(BUSINESS_MAIL,contactProyectDTO);
+		userService.saveUserProyectContact(contactProyectDTO);
+
 	}
 
 }
