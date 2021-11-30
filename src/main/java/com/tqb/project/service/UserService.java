@@ -34,6 +34,7 @@ import com.tqb.project.dao.IUserDao;
 import com.tqb.project.model.TestResult;
 import com.tqb.project.model.User;
 import com.tqb.project.model.dto.ChangePasswordDTO;
+import com.tqb.project.model.dto.ContactProyectDTO;
 
 @Service
 public class UserService implements UserDetailsService, IUserService {
@@ -262,6 +263,31 @@ public class UserService implements UserDetailsService, IUserService {
 
 	public int getRandomNumber(int min, int max) {
 		return (int) ((Math.random() * (max - min)) + min);
+	}
+
+	@Override
+	public void sendEmailContactProyect(String businessMail, ContactProyectDTO contactProyectDTO) throws MessagingException {
+		MimeMessage msg = javaMailSender.createMimeMessage();
+
+		// true = multipart message
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true); 
+		helper.setTo(businessMail);
+		helper.setFrom(new InternetAddress(businessMail));
+		helper.setSubject("Un usuario está interesado en el proyecto");
+		helper.setText("<html>"
+				+ "<body>"
+				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" 
+				+ "<div>"
+				+ "<h4> Un nuevo usuario está interesado en el proyecto, a continuación se detallan sus datos de contacto: <br>"
+				+ "Nombre:  "+contactProyectDTO.getName()+"<br>"
+				+ "Apellido: "+contactProyectDTO.getLastName()+"<br>"
+				+ "Mail: "+contactProyectDTO.getMail()+"<br>"
+				+ "Telefono: "+contactProyectDTO.getTelefono()+"<br></h4>"
+				+ "</div>"
+				+ "</body>" 
+				+ "</html>", true);
+
+		javaMailSender.send(msg);
 	}
 
 //    public void sendEmail() {

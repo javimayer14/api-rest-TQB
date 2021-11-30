@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.tqb.project.model.TestResult;
 import com.tqb.project.model.User;
 import com.tqb.project.model.dto.ChangePasswordDTO;
+import com.tqb.project.model.dto.ContactProyectDTO;
 
 public interface IUserService {
 	
@@ -19,5 +20,6 @@ public interface IUserService {
 	public void saveTest(TestResult testResult);
 	public void sendEmailResultTest(String email, String name, String bussinesMail) throws MessagingException, IOException;
 	public void sendEmailTeem(String businessMail, String affairBusinessMail, String userEmail) throws MessagingException ;
+	public void sendEmailContactProyect(String businessMail, ContactProyectDTO contactProyectDTO) throws MessagingException;
 
 }

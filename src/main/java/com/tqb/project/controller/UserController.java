@@ -29,6 +29,7 @@ import com.tqb.project.model.Pdf;
 import com.tqb.project.model.TestResult;
 import com.tqb.project.model.User;
 import com.tqb.project.model.dto.ChangePasswordDTO;
+import com.tqb.project.model.dto.ContactProyectDTO;
 import com.tqb.project.service.DocStorageService;
 import com.tqb.project.service.IUserService;
 
@@ -98,6 +99,13 @@ public class UserController {
 			throws MessagingException, IOException {
 		userService.saveTest(testResult);
 		userService.sendEmailResultTest(BUSINESS_MAIL,testResult.getEmail(), testResult.getName());
+	}
+	
+	@PostMapping("user/contact-proyect")
+	@ResponseStatus(HttpStatus.CREATED)
+	public void contactProyect(@RequestBody ContactProyectDTO contactProyectDTO)
+			throws MessagingException, IOException {
+		userService.sendEmailContactProyect(BUSINESS_MAIL,contactProyectDTO);
 	}
 
 }
