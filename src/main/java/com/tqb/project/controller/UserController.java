@@ -8,6 +8,7 @@ import javax.mail.MessagingException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import com.tqb.project.model.Pdf;
 import com.tqb.project.model.TestResult;
@@ -41,6 +43,10 @@ public class UserController {
 	public static final String BUSINESS_MAIL = "equipo@thequalitybridge.com";
 	public static final String AFFAIR_CONTACT_MAIL = "Equipo TQB";
 	public static final String AFFAIR_BUSINESS_MAIL = "Nuevo usuario a confirmar";
+	private static final String DATA_INTEGRITY = "usuario ya creado";
+	private static final String GENERIC_MESSAGGE = "Algo salió mal: ";
+
+
 
 	@Autowired
 	private DocStorageService docStorageService;
@@ -55,11 +61,13 @@ public class UserController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public void create(@RequestBody User user) throws MessagingException, IOException {
 		try {
+			userService.save(user, passwordEncoder);
 			userService.sendEmail(user.getEmail(), AFFAIR_CONTACT_MAIL, user.getName() );
 			userService.sendEmailTeem(BUSINESS_MAIL, AFFAIR_BUSINESS_MAIL, user.getEmail());
-			userService.save(user, passwordEncoder);
+		}catch (ResponseStatusException ex) {
+			throw new ResponseStatusException(HttpStatus.CONFLICT, DATA_INTEGRITY);
 		}catch(Exception e) {
-			System.out.println("algo salio mal "+ e);
+			System.out.println(GENERIC_MESSAGGE+ e);
 		}
 
 	}
