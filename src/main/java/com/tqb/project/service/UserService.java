@@ -157,8 +157,7 @@ public class UserService implements UserDetailsService, IUserService {
 
 	}
 
-//	@Scheduled(fixedDelay = 5400000)
-	@Scheduled(fixedDelay = 50000)
+	@Scheduled(fixedDelay = 5400000)
 	public void validateUser() throws MessagingException {
 		System.out.println("prueba cron");
 		List<User> usersNotValidated = usuarioDao.findNotValidated();
