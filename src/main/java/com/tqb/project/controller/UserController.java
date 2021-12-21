@@ -15,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -59,6 +60,7 @@ public class UserController {
 
 	@PostMapping("/user")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Transactional
 	public void create(@RequestBody User user) throws MessagingException, IOException {
 		try {
 			userService.save(user, passwordEncoder);
@@ -74,6 +76,7 @@ public class UserController {
 
 	@PostMapping("user/change-password")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Transactional
 	public void changePassword(@RequestBody ChangePasswordDTO changePasswordForm, Authentication authentication)
 			throws MessagingException, IOException {
 		userService.changePassword(changePasswordForm, passwordEncoder, authentication);
@@ -81,6 +84,7 @@ public class UserController {
 
 	@PostMapping("user/present-proyect")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Transactional
 	public void presentProject(@RequestParam(value = "file") MultipartFile file)
 			throws MessagingException, IOException {
 		docStorageService.saveFile(file);
@@ -103,6 +107,7 @@ public class UserController {
 	
 	@PostMapping("user/result-test")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Transactional
 	public void resulTest(@RequestBody TestResult testResult)
 			throws MessagingException, IOException {
 		userService.saveTest(testResult);
@@ -111,6 +116,7 @@ public class UserController {
 	
 	@PostMapping("user/contact-proyect")
 	@ResponseStatus(HttpStatus.CREATED)
+	@Transactional
 	public void contactProyect(@RequestBody ContactProyectDTO contactProyectDTO)
 			throws MessagingException, IOException {
 		userService.sendEmailContactProyect(BUSINESS_MAIL,contactProyectDTO);
