@@ -50,7 +50,6 @@ public class UserService implements UserDetailsService, IUserService {
 	@Autowired
 	private ITestDao testDao;
 
-
 	@Override
 	@Transactional(readOnly = true)
 	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -162,18 +161,20 @@ public class UserService implements UserDetailsService, IUserService {
 		System.out.println("prueba cron");
 		List<User> usersNotValidated = usuarioDao.findNotValidated();
 		BCryptPasswordEncoder passwordEncode = new BCryptPasswordEncoder();
-		for (User u : usersNotValidated) {
-			Integer randomInt = getRandomNumber(10000, 99999);
-			String randomStringNumber = randomInt.toString();
-			u.setPassword(passwordEncode.encode(randomStringNumber));
-			u.setValidate(true);
-			sendEmailvalidation(u.getEmail(),u.getName(), randomStringNumber);
-			System.out.println("La contra generada es: " + randomStringNumber);
+		if (usersNotValidated != null) {
+			for (User u : usersNotValidated) {
+				Integer randomInt = getRandomNumber(10000, 99999);
+				String randomStringNumber = randomInt.toString();
+				u.setPassword(passwordEncode.encode(randomStringNumber));
+				u.setValidate(true);
+				sendEmailvalidation(u.getEmail(), u.getName(), randomStringNumber);
+				System.out.println("La contra generada es: " + randomStringNumber);
+			}
+			usuarioDao.saveAll(usersNotValidated);
 		}
-		usuarioDao.saveAll(usersNotValidated);
 	}
 
-	private void sendEmailvalidation(String mail,String name, String randomStringNumber) throws MessagingException {
+	private void sendEmailvalidation(String mail, String name, String randomStringNumber) throws MessagingException {
 		if (mail == null)
 			return;
 
@@ -186,8 +187,7 @@ public class UserService implements UserDetailsService, IUserService {
 		helper.setSubject("Bienvenido a la comunidad de inversores. ¡Ya eres miembro!");
 		helper.setText("<html>" + "<body>"
 				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
-				+ "<h2> Hola "+name+"</h2><br>"
-				+ "<br>"
+				+ "<h2> Hola " + name + "</h2><br>" + "<br>"
 				+ "Es un gusto darte la bienvenida a la comunidad de inversores que te facilita los puentes para expandir tus oportunidades. <br>"
 				+ "<br>"
 				+ "Antes de contarte más, por estar dentro de los 1000 primeros miembros de la comunidad, te invitamos a descargarte el material exclusivo que te prometimos: <br>"
@@ -195,39 +195,24 @@ public class UserService implements UserDetailsService, IUserService {
 				+ "Haz click<a href=\"http://www.thequalitybridgeblog.com/KeySteps.pdf\" target=\"_blank\"> aquí</a> para descargarlo.<br>"
 				+ "<br>"
 				+ "The Quality Bridge está conformada por inversores de habla hispana de todo el mundo que tienen el mismo objetivo: Realizar inversiones exitosas. <br>"
-				+ "<br>"
-				+ "¿Cómo lo logramos? Conectados y en movimiento. <br>" 
-				+ "<br>"
-				+ "Ser miembro te va a permitir: <br>"
-				+ "<br>"
+				+ "<br>" + "¿Cómo lo logramos? Conectados y en movimiento. <br>" + "<br>"
+				+ "Ser miembro te va a permitir: <br>" + "<br>"
 				+ "Acceder a la información completa para invertir en los proyectos.<br>"
 				+ "Recibir contenido exclusivo para mejorar tus habilidades como inversor <br>"
 				+ "Asegurar tu lugar en seminarios y workshops con referentes del mercado. <br>"
 				+ "Prioridad para obtener informes y análisis de mercado para tomar mejores decisiones<br>"
-				+ "Tener la posibilidad de compartir proyectos a todos los miembros <br>"
-				+ "<br>"
-				+ "<br>"
+				+ "Tener la posibilidad de compartir proyectos a todos los miembros <br>" + "<br>" + "<br>"
 				+ "Como miembro registrado ahora podrás consultar y solicitar la información completa de los proyectos de inversión. Ya los viste? ¡Haz click<a href=\"https://thequalitybridge.com/#proyectos\" target=\"_blank\"> aquí</a>\n"
-				+ " para conocerlos!   <br>"
-				+ "<br>"
+				+ " para conocerlos!   <br>" + "<br>"
 				+ "The Quality Blog: Con frecuencia semanal podrás ver notas, recomendaciones, consejos y análisis, escritos por nuestro equipo de profesionales y reconocidos periodistas de los medios más importantes. Sobre distintos temas: Economía, Mercado, Real Estate, Finanzas y mucho más. Haz click<a href=\"https://www.thequalitybridgeblog.com/\" target=\"_blank\"> aquí</a>\n"
-				+ " para ingresar. <br>"
-				+ "<br>"
-				+ "PRÓXIMAMENTE <br>"
-				+ "<br>"
+				+ " para ingresar. <br>" + "<br>" + "PRÓXIMAMENTE <br>" + "<br>"
 				+ "Ciclo de Webinars: En muy poco tiempo presentaremos ciclos de webinars para ampliar tu visión como inversor. ¡Estate atento! <br>"
 				+ "<br>"
 				+ "TQB Flash Report: Estamos preparando algo que te va acompañar todas las semanas y que tendrá impacto en tus evaluaciones de mercado y al momento de decidir en qué invertir. <br>"
 				+ "<br>"
 				+ "Si deseas saber más o tienes alguna duda sobre la comunidad de inversores, puedes contactarte con nosotros respondiendo este correo. <br>"
-				+ "<br>"
-				+ "Es un honor contar contigo en TQB. <br>"
-				+ "<br>"
-				+ "Saludos! <br>"
-				+ "<br>"
-				+ "El equipo de inversores de The Quality Bridge <br>"
-				+ ""
-				+ "</h4>" + "</div>"
+				+ "<br>" + "Es un honor contar contigo en TQB. <br>" + "<br>" + "Saludos! <br>" + "<br>"
+				+ "El equipo de inversores de The Quality Bridge <br>" + "" + "</h4>" + "</div>"
 				+ "<div>Síguenos en nuestras redes para mantenerte conectado y en movimiento</div>"
 				+ "<a href=\"https://www.facebook.com/thequalitybridge\">Facebook</a>\n"
 				+ "<a href=\"https://www.instagram.com/thequalitybridge\">Instagram</a>\n"
@@ -244,7 +229,7 @@ public class UserService implements UserDetailsService, IUserService {
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
-		MimeMessageHelper helper = new MimeMessageHelper(msg, true); 
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(businessMail);
 		helper.setFrom(new InternetAddress(businessMail));
 		helper.setSubject(affairBusinessMail);
@@ -265,26 +250,21 @@ public class UserService implements UserDetailsService, IUserService {
 	}
 
 	@Override
-	public void sendEmailContactProyect(String businessMail, ContactProyectDTO contactProyectDTO) throws MessagingException {
+	public void sendEmailContactProyect(String businessMail, ContactProyectDTO contactProyectDTO)
+			throws MessagingException {
 		MimeMessage msg = javaMailSender.createMimeMessage();
 
 		// true = multipart message
-		MimeMessageHelper helper = new MimeMessageHelper(msg, true); 
+		MimeMessageHelper helper = new MimeMessageHelper(msg, true);
 		helper.setTo(businessMail);
 		helper.setFrom(new InternetAddress(businessMail));
 		helper.setSubject("Un usuario está interesado en el proyecto");
-		helper.setText("<html>"
-				+ "<body>"
-				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" 
-				+ "<div>"
+		helper.setText("<html>" + "<body>"
+				+ "<img src='cid:rightSideImage' style='align-content: center;width:1000px;height:200px;'/>" + "<div>"
 				+ "<h4> Un nuevo usuario está interesado en el proyecto, a continuación se detallan sus datos de contacto: <br>"
-				+ "Nombre:  "+contactProyectDTO.getName()+"<br>"
-				+ "Apellido: "+contactProyectDTO.getLastName()+"<br>"
-				+ "Mail: "+contactProyectDTO.getMail()+"<br>"
-				+ "Telefono: "+contactProyectDTO.getTelefono()+"<br></h4>"
-				+ "</div>"
-				+ "</body>" 
-				+ "</html>", true);
+				+ "Nombre:  " + contactProyectDTO.getName() + "<br>" + "Apellido: " + contactProyectDTO.getLastName()
+				+ "<br>" + "Mail: " + contactProyectDTO.getMail() + "<br>" + "Telefono: "
+				+ contactProyectDTO.getTelefono() + "<br></h4>" + "</div>" + "</body>" + "</html>", true);
 
 		javaMailSender.send(msg);
 	}
