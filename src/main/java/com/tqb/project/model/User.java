@@ -1,17 +1,23 @@
 package com.tqb.project.model;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EntityListeners;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.Table;
+
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonProperty.Access;
@@ -20,6 +26,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "user")
 public class User implements Serializable {
 
@@ -52,7 +59,14 @@ public class User implements Serializable {
 	private Boolean enabled;
 
 	private String phone;
+	
+	@Column(name = "created_date", updatable = false)
+	@CreatedDate
+	private Date createdDate;
 
+	@Column(name = "modified_date")
+	@LastModifiedDate
+	private Date modifiedDate;
 
 
 
